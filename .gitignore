@@ -1,0 +1,22 @@
+# Stata generated files
+*.log
+*.smcl
+*.gph
+*.tmp
+*.dta.bak
+
+# Figures / exports
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.svg
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter / Python if later added
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
