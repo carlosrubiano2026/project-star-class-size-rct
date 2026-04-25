@@ -1,0 +1,376 @@
+============================================================
+MAIN RESULTS — PROJECT STAR CLASS SIZE RANDOMIZED EXPERIMENT
+============================================================
+
+Repository file: main_results.txt
+Data file inspected: STAR.dta
+Do-file inspected: project_star_class_size_rct.do
+
+This file summarizes the main empirical results from the Project STAR
+kindergarten sample. The analysis estimates the effect of assignment to a
+small kindergarten class on student test scores.
+
+============================================================
+1. DATA AND SAMPLE
+============================================================
+
+Dataset: STAR.dta
+Unit of observation: student
+Number of observations: 5,749
+Number of variables: 6
+
+Variables:
+- tscorek: kindergarten test score
+- sck: small-class treatment indicator
+- totexpk: years of total teaching experience in kindergarten
+- schidkn: kindergarten school identifier
+- boy: indicator for male student
+- freelunk: indicator for free school lunch eligibility
+
+There are no missing values in the variables used in the analysis:
+tscorek, sck, totexpk, schidkn, boy, and freelunk.
+
+Treatment assignment:
+- Regular class, sck = 0: 4,016 students (69.86%)
+- Small class, sck = 1: 1,733 students (30.14%)
+
+Other sample characteristics:
+- Boys: 2,954 students (51.38%)
+- Girls: 2,795 students (48.62%)
+- Free lunch eligible: 2,776 students (48.29%)
+- Not free lunch eligible: 2,973 students (51.71%)
+- Number of schools: 79
+
+Summary statistics:
+- Mean kindergarten test score: 922.39
+- Standard deviation of test score: 73.87
+- Mean teacher experience: 9.31 years
+- Standard deviation of teacher experience: 5.77 years
+
+
+============================================================
+2. DIFFERENCE IN MEANS AND SHORT REGRESSION
+============================================================
+
+Mean test score by treatment status:
+- Regular class: 918.23
+- Small class: 932.05
+
+Raw difference in means:
+- Small class minus regular class: 13.83 test-score points
+
+OLS short regression:
+    tscorek_i = alpha + beta * sck_i + u_i
+
+Estimated effect:
+- beta = 13.83
+- Robust standard error = 2.16
+- p-value < 0.01
+- R-squared = 0.0074
+
+Effect size:
+- 13.83 / 73.87 = 0.187 standard deviations
+
+Interpretation:
+In the unconditional comparison, students assigned to small classes score
+about 13.8 points higher than students assigned to regular classes. This is
+equivalent to approximately 0.19 standard deviations of the kindergarten test
+score distribution.
+
+
+============================================================
+3. SCHOOL FIXED EFFECTS
+============================================================
+
+Because treatment assignment occurred within schools, the preferred
+specification includes school fixed effects:
+
+    tscorek_is = alpha + beta * sck_is + gamma_s + u_is
+
+where gamma_s denotes school fixed effects.
+
+School fixed effects with robust standard errors:
+- beta = 15.13
+- Robust standard error = 1.98
+- p-value < 0.01
+- R-squared = 0.2314
+
+Effect size:
+- 15.13 / 73.87 = 0.205 standard deviations
+
+Interpretation:
+After controlling for school fixed effects, assignment to a small class
+raises kindergarten test scores by about 15.1 points. The estimate is slightly
+larger than the raw difference in means and remains highly statistically
+significant.
+
+
+============================================================
+4. CONVENTIONAL, ROBUST, AND CLUSTERED STANDARD ERRORS
+============================================================
+
+Main treatment coefficient under school fixed effects:
+- Conventional SE: beta = 15.13, SE = 1.90
+- Robust SE:      beta = 15.13, SE = 1.98
+- Clustered SE:   beta = 15.13, SE = 3.64
+
+The coefficient is unchanged across these specifications because the
+regression specification is the same. What changes is the way uncertainty is
+estimated.
+
+The school-clustered specification is especially relevant because it allows
+for arbitrary correlation in unobservables within schools.
+
+Preferred inference:
+- School fixed effects
+- Standard errors clustered at the school level
+
+Preferred estimate:
+- beta = 15.13
+- Clustered standard error = 3.64
+- p-value < 0.01
+- 95% confidence interval: [7.87, 22.38]
+
+Interpretation:
+Even after allowing for within-school error correlation, the estimated effect
+of small class assignment remains positive, economically meaningful, and
+statistically significant.
+
+
+============================================================
+5. RANDOMIZATION INFERENCE
+============================================================
+
+Randomization inference was implemented using permutation tests with 1,000
+replications, stratifying by school. This matches the experimental design
+because assignment was randomized within schools.
+
+Observed treatment effect:
+- beta = 15.13
+
+Randomization inference p-value:
+- p = 0.0000 using 1,000 replications
+- Reported confidence interval for p: [0, 0.0037]
+
+Interpretation:
+None of the 1,000 placebo reassignments generated an effect as extreme as the
+observed estimate. This provides strong design-based evidence against the null
+hypothesis of no treatment effect.
+
+
+============================================================
+6. BALANCE CHECKS
+============================================================
+
+The balance checks regress pre-treatment covariates on small-class assignment,
+including school fixed effects and clustering standard errors by school.
+
+Balance regressions:
+
+Outcome: boy
+- Coefficient on sck = 0.0007
+- Clustered SE = 0.0151
+- p-value = 0.963
+
+Outcome: free lunch eligibility
+- Coefficient on sck = -0.0076
+- Clustered SE = 0.0140
+- p-value = 0.592
+
+Outcome: teacher experience
+- Coefficient on sck = -0.4270
+- Clustered SE = 0.6597
+- p-value = 0.519
+
+Interpretation:
+Small-class assignment does not significantly predict gender, free lunch
+status, or teacher experience. These results support the validity of the
+random assignment mechanism within schools.
+
+
+============================================================
+7. SCHOOL FIXED EFFECTS WITH COVARIATES
+============================================================
+
+The analysis also estimates a school fixed effects model with additional
+student and teacher controls:
+
+    tscorek_is = alpha + beta * sck_is + X_is' delta + gamma_s + u_is
+
+Controls:
+- boy
+- freelunk
+- totexpk
+- school fixed effects
+
+Clustered standard errors are used at the school level.
+
+Estimated treatment effect:
+- beta = 15.13
+- Clustered SE = 3.54
+- p-value < 0.01
+- R-squared = 0.2847
+
+Control coefficients:
+- boy: -12.00, SE = 1.58, p-value < 0.01
+- freelunk: -37.32, SE = 2.57, p-value < 0.01
+- totexpk: 0.66, SE = 0.35, p-value ≈ 0.067
+
+Interpretation:
+Adding covariates barely changes the treatment effect: the coefficient remains
+15.13. This stability is consistent with successful randomization. The
+coefficients on boy, free lunch, and teacher experience should be interpreted
+as conditional associations, not necessarily causal effects.
+
+
+============================================================
+8. HETEROGENEOUS TREATMENT EFFECTS
+============================================================
+
+The heterogeneous effects specification interacts small-class assignment with
+student gender, free lunch eligibility, and teacher experience:
+
+    tscorek_is = alpha
+              + beta * sck_is
+              + delta_1 * boy_is
+              + delta_2 * freelunk_is
+              + delta_3 * totexpk_is
+              + theta_1 * (sck_is x boy_is)
+              + theta_2 * (sck_is x freelunk_is)
+              + theta_3 * (sck_is x totexpk_is)
+              + gamma_s
+              + u_is
+
+Clustered standard errors are used at the school level.
+
+Estimated coefficients:
+- sck: 18.95, SE = 7.75, p-value < 0.05
+- boy: -13.83, SE = 1.91, p-value < 0.01
+- freelunk: -38.07, SE = 2.94, p-value < 0.01
+- totexpk: 0.94, SE = 0.40, p-value < 0.05
+- sck x boy: 6.14, SE = 3.54, p-value ≈ 0.087
+- sck x freelunk: 2.15, SE = 5.53, p-value = 0.698
+- sck x totexpk: -0.88, SE = 0.68, p-value = 0.203
+
+Joint test of homogeneous treatment effects:
+- Null hypothesis: all three interaction terms are equal to zero
+- F-statistic = 1.86
+- p-value = 0.1437
+
+Interpretation:
+There is no strong evidence that the treatment effect differs systematically
+by gender, free lunch eligibility, or teacher experience. The interaction with
+boy is positive and marginally significant at the 10% level, but the joint test
+does not reject homogeneous treatment effects.
+
+
+============================================================
+9. IMPLIED TREATMENT EFFECTS FOR SELECTED GROUPS
+============================================================
+
+Based on the heterogeneous effects model:
+
+Baseline group:
+- Girl
+- Not free lunch eligible
+- Teacher with zero years of experience
+
+Estimated small-class effect:
+- 18.95 points
+- SE = 7.75
+- p-value < 0.05
+
+Boy, not free lunch eligible, zero teacher experience:
+- 25.09 points
+- SE = 7.48
+- p-value < 0.01
+
+Girl, free lunch eligible, zero teacher experience:
+- 21.10 points
+- SE = 9.36
+- p-value < 0.05
+
+Boy, free lunch eligible, zero teacher experience:
+- 27.24 points
+- SE = 8.45
+- p-value < 0.01
+
+At mean teacher experience:
+- Mean teacher experience = 9.31 years
+- Implied treatment effect = 10.78 points
+- SE = 4.55
+- p-value < 0.05
+
+
+============================================================
+10. MAIN CONCLUSION
+============================================================
+
+The Project STAR kindergarten results show a positive and statistically
+significant effect of assignment to a small class on student achievement.
+
+The preferred specification includes school fixed effects and school-clustered
+standard errors. Under this specification, small-class assignment increases
+kindergarten test scores by approximately:
+
+    15.1 test-score points
+
+This corresponds to approximately:
+
+    0.20 standard deviations
+
+The estimate is robust to:
+- using school fixed effects,
+- using robust standard errors,
+- clustering standard errors by school,
+- adding student and teacher covariates,
+- randomization inference based on within-school treatment reassignment.
+
+Balance checks support the randomization design, since treatment assignment
+does not significantly predict observed pre-treatment covariates.
+
+Overall, the evidence indicates that assignment to a small kindergarten class
+substantially improves student test performance in the Project STAR sample.
+
+
+============================================================
+KEY NUMBERS
+============================================================
+
+Observations: 5,749
+Schools: 79
+
+Raw difference in means:
+- 13.83 points
+
+Short regression:
+- 13.83
+- Robust SE = 2.16
+- Effect size = 0.187 SD
+
+School fixed effects:
+- 15.13
+- Robust SE = 1.98
+- Effect size = 0.205 SD
+
+School fixed effects, clustered SE:
+- 15.13
+- Clustered SE = 3.64
+- 95% CI = [7.87, 22.38]
+
+School fixed effects + controls, clustered SE:
+- 15.13
+- Clustered SE = 3.54
+
+Randomization inference:
+- Observed beta = 15.13
+- p-value = 0.0000
+
+Balance tests:
+- boy: 0.0007, SE = 0.0151
+- freelunk: -0.0076, SE = 0.0140
+- totexpk: -0.4270, SE = 0.6597
+
+Heterogeneity joint test:
+- F(3, 78) = 1.86
+- p-value = 0.1437
